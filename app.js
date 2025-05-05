@@ -53,6 +53,7 @@ touches.forEach((touche) => {
 
     if (value === "AC") {
       screen.textContent = "";
+      save_result.textContent = "";
       errorMode = false;
       afterEqual = false;
       return;
@@ -154,6 +155,23 @@ document.addEventListener("keydown", (e) => {
     save_result.textContent = "";
     errorMode = false;
     afterEqual = false;
+  } else if (key === "h" || key === "H") {
+    historyPanel.classList.toggle("open");
+    afficherHistorique();
+  } else if (key === "ArrowLeft") {
+    if (history.length > 0 && historyIndex > 0) {
+      historyIndex--;
+      const entry = history[historyIndex];
+      screen.textContent = entry.result;
+      afficherDernierCalcul(entry);
+    }
+  } else if (key === "ArrowRight") {
+    if (history.length > 0 && historyIndex < history.length - 1) {
+      historyIndex++;
+      const entry = history[historyIndex];
+      screen.textContent = entry.result;
+      afficherDernierCalcul(entry);
+    }
   }
 });
 
@@ -201,21 +219,17 @@ document.addEventListener("click", (e) => {
 });
 
 leftArrow.addEventListener("click", () => {
-  if (history.length === 0) return;
+  if (history.length === 0 || historyIndex <= 0) return;
+  historyIndex--;
   const entry = history[historyIndex];
-  if (historyIndex > 0) {
-    historyIndex--;
-    screen.textContent = entry.result;
-    afficherDernierCalcul(entry);
-  }
+  screen.textContent = entry.result;
+  afficherDernierCalcul(entry);
 });
 
 rightArrow.addEventListener("click", () => {
-  if (history.length === 0) return;
-  if (historyIndex < history.length - 1) {
-    historyIndex++;
-    const entry = history[historyIndex];
-    screen.textContent = entry.result;
-    afficherDernierCalcul(entry);
-  }
+  if (history.length === 0 || historyIndex >= history.length - 1) return;
+  historyIndex++;
+  const entry = history[historyIndex];
+  screen.textContent = entry.result;
+  afficherDernierCalcul(entry);
 });
